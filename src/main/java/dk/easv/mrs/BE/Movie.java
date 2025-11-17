@@ -20,10 +20,18 @@ public class Movie {
         return title;
     }
 
+    /**
+     * Sets the title
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Gets the year of the movie
+     * @return
+     */
     public int getYear() {
         return year;
     }

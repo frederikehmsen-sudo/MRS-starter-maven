@@ -1,6 +1,9 @@
+// Project imports
 package dk.easv.mrs.GUI.Model;
 import dk.easv.mrs.BE.Movie;
 import dk.easv.mrs.BLL.MovieManager;
+
+// Java imports
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.List;
@@ -27,5 +30,24 @@ public class MovieModel {
         List<Movie> searchResults = movieManager.searchMovies(query);
         moviesToBeViewed.clear();
         moviesToBeViewed.addAll(searchResults);
+    }
+    public Movie createMovie(Movie newMovie) throws Exception{
+        Movie movieCreated = movieManager.createMovie(newMovie);
+        moviesToBeViewed.add(movieCreated);
+        return movieCreated;
+    }
+
+    public void updateMovie(Movie updatedMovie) throws Exception {
+        movieManager.updateMovie(updatedMovie);
+
+        //moviesToBeViewed.set(?,updatedMovie);
+        int index = moviesToBeViewed.indexOf(updatedMovie);
+        moviesToBeViewed.set(index, updatedMovie);
+    }
+
+    public void deleteMovie(Movie selectedMovie) throws Exception {
+        movieManager.deleteMovie(selectedMovie);
+
+        moviesToBeViewed.remove(selectedMovie);
     }
 }

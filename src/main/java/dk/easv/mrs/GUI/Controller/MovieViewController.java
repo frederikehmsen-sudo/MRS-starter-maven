@@ -7,9 +7,9 @@ import dk.easv.mrs.GUI.Model.MovieModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -17,11 +17,17 @@ public class MovieViewController implements Initializable {
 
 
     public TextField txtMovieSearch;
-    public ListView<Movie> lstMovies;
+    //public ListView<Movie> lstMovies;
     private MovieModel movieModel;
 
     @FXML
     private TextField txtTitle, txtYear;
+    @FXML
+    private TableColumn<Movie, String> colTitle;
+    @FXML
+    private TableColumn<Movie, Integer> colYear;
+    @FXML
+    private TableView<Movie> tblMovies;
 
     public MovieViewController()  {
 
@@ -37,9 +43,12 @@ public class MovieViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        lstMovies.setItems(movieModel.getObservableMovies());
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
 
-        lstMovies.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, selectedMovie) ->
+        tblMovies.setItems(movieModel.getObservableMovies());
+
+        tblMovies.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, selectedMovie) ->
         {
             if(selectedMovie != null) {
                 txtTitle.setText(selectedMovie.getTitle());
@@ -89,7 +98,7 @@ public class MovieViewController implements Initializable {
     @FXML
     private void btnHandleUpdateClick(ActionEvent actionevent){
 
-        Movie selectedMovie = lstMovies.getSelectionModel().getSelectedItem();
+        Movie selectedMovie = tblMovies.getSelectionModel().getSelectedItem();
         if(selectedMovie != null) {
             selectedMovie.setTitle(txtTitle.getText());
             selectedMovie.setYear(Integer.parseInt(txtYear.getText()));
@@ -101,15 +110,15 @@ public class MovieViewController implements Initializable {
                 displayError(err);
             }
 
-            lstMovies.refresh();
-            lstMovies.scrollTo(selectedMovie);
-            lstMovies.getSelectionModel().select(lstMovies.getItems().indexOf(selectedMovie));
+            tblMovies.refresh();
+            tblMovies.scrollTo(selectedMovie);
+            tblMovies.getSelectionModel().select(tblMovies.getItems().indexOf(selectedMovie));
         }
     }
 
     @FXML
     private void btnHandleDeleteClick(ActionEvent actionEvent) {
-        Movie selectedMovie = lstMovies.getSelectionModel().getSelectedItem();
+        Movie selectedMovie = tblMovies.getSelectionModel().getSelectedItem();
 
         if(selectedMovie != null){
             try {
